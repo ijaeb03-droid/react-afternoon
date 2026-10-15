@@ -1,0 +1,145 @@
+
+/* 전체 요소의 크기 계산 방식 통일 */
+* {
+  box-sizing: border-box;
+}
+
+/* 브라우저 기본 여백 제거 */
+body {
+  margin: 0;
+  background: #f1f5f9;
+  font-family:
+    -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, sans-serif;
+  color: #0f172a;
+}
+
+/* 전체 게시판 영역 */
+.page {
+  width: 100%;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 30px;
+}
+
+/* 게시판 제목 */
+.page h1 {
+  margin-top: 0;
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 32px;
+  color: #0f172a;
+}
+
+/* 게시글 하나의 카드 */
+.post-card {
+  padding: 20px;
+  margin-bottom: 16px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* 게시글 제목 */
+.post-card h2 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 20px;
+  color: #1e293b;
+}
+
+/* 게시글 내용 */
+.post-card p {
+  margin: 0;
+  line-height: 1.6;
+  color: #475569;
+}
+
+/* 게시글 카드에 마우스를 올렸을 때 */
+.post-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* 카드가 움직일 때 부드럽게 표시 */
+.post-card {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* 데이터를 불러오는 중 표시 */
+.page > p {
+  text-align: center;
+  font-size: 18px;
+  color: #64748b;
+}
+
+/* 작은 화면 대응 */
+@media (max-width: 700px) {
+  .page {
+    margin: 20px auto;
+    padding: 20px;
+  }
+
+  .page h1 {
+    font-size: 26px;
+  }
+
+  .post-card h2 {
+    font-size: 18px;
+  }
+}
+
+
+/* 검색 영역 추가 */
+.search-area {
+  margin-bottom: 15px;
+}
+
+/* 검색 입력창 */
+.search-area input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 16px;
+  background: white;
+  outline: none;
+}
+
+/* 검색창을 클릭했을 때 */
+.search-area input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* 검색 결과 개수 */
+.search-count {
+  margin-bottom: 20px;
+  text-align: right;
+  font-size: 14px;
+  font-weight: bold;
+  color: #64748b;
+}
+
+/* 검색 결과가 없을 때 */
+.no-result {
+  margin-top: 30px;
+  padding: 20px;
+  text-align: center;
+  background: white;
+  border-radius: 10px;
+  color: #94a3b8;
+  font-weight: bold;
+}
+
+
+.post-number {
+  display: inline-block;
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #6366f1;
+}
