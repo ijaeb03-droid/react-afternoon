@@ -1,244 +1,87 @@
 
-import { useEffect, useRef, useState } from 'react'
+import { useState, useMemo, useCallback, useContext } from 'react'
 import './App.css'
 
+// Header : 화면 위쪽 영역
+// StudentList : 학생 목록을 출력하는 영역
+import Header from './Header.jsx'
+import StudentList from './StudentList.jsx'
+
+// main.jsx에서 ThemeProvider로 App을 감쌌기 때문에
+// useContext를 이용해서 ThemeContext의 값을 가져옴.
+import { ThemeContext } from './ThemeContext.jsx'
+
+// 학생 데이터
+const students = [
+  { id: 1, name: '김민수', major: '멀티미디어', score: 85 },
+  { id: 2, name: '이영희', major: '컴퓨터공학', score: 92 },
+  { id: 3, name: '박지훈', major: '멀티미디어', score: 76 },
+  { id: 4, name: '최유진', major: '컴퓨터공학', score: 88 },
+  { id: 5, name: '정현우', major: '멀티미디어', score: 95 }
+]
+
 function App() {
-  // 1. 학생 이름 저장
-  const [name, setName] = useState('')
+  // search: 검색어 상태 (기본값 '') 및 변경 함수(setSearch)
+  const [search, setSearch] = useState('')
 
-  // 2. 출석 상태 저장
-  const [attendance, setAttendance] = useState('출석')
+  // ThemeContext의 theme 값에 따라 동적으로 CSS 클래스를 변경
+  const { theme } = useContext(ThemeContext)
 
-  // 3. 메모 내용 저장
-  const [memo, setMemo] = useState('')
+  // [search] 변경 시에만 이름 검색 결과를 재계산(useMemo)합니다.
+  const filteredStudents = useMemo(() => {
+    return students.filter((student) => student.name.includes(search))
+  }, [search])
 
-  // 4. 등록된 학생 목록 저장
-  const [students, setStudents] = useState([])
-
-  // 5. 결과 메시지 저장
-  const [message, setMessage] = useState('')
-
-  // 6. 현재 시간 저장
-  const [currentTime, setCurrentTime] = useState(new Date())
-
-  // 7. 이름 입력창을 직접 가리키기 위한 useRef
-  const nameInputRef = useRef(null)
-
-  // 8. 현재 시간 자동 변경
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date())
-    }, 1000)
-
-    return () => {
-      clearInterval(timer)
-    }
-  }, [])
-
-  // 9. 화면이 처음 실행될 때 이름 입력창 선택
-  useEffect(() => {
-    if (nameInputRef.current) {
-      nameInputRef.current.focus()
-    }
-  }, [])
-
-  // 10. 학생 추가 함수
-  const addStudent = () => {
-    if (name === '') {
-      setMessage('학생 이름을 입력하세요.')
-      nameInputRef.current.focus()
-      return
+  // [filteredStudents] 변경 시에만 평균 점수를 재계산(useMemo)
+  const averageScore = useMemo(() => {
+    if (filteredStudents.length === 0) {
+      return 0 // 검색 결과가 없으면 0을 반환
     }
 
-    const newStudent = {
-      id: Date.now(),
-      name: name,
-      attendance: attendance,
-      memo: memo
-    }
-
-    // 기존 학생 목록에 새로운 학생 추가
-    const updatedStudents = students.concat(newStudent)
-
-    setStudents(updatedStudents)
-
-    setMessage('학생이 등록되었습니다.')
-
-    // 입력값 초기화
-    setName('')
-    setAttendance('출석')
-    setMemo('')
-
-    nameInputRef.current.focus()
-  }
-
-  // 11. 학생 한 명 삭제 함수
-  const deleteStudent = (id) => {
-    const updatedStudents = students.filter((student) =>
-      student.id !== id
+    // 학생들의 점수를 모두 더합니다.
+    const total = filteredStudents.reduce((sum, student) =>
+      sum + student.score, 0
     )
 
-    setStudents(updatedStudents)
+    // 총점을 학생 수로 나누어 평균 점수를 계산합니다.
+    return Math.round(total / filteredStudents.length)
+  }, [filteredStudents])
 
-    setMessage('학생 정보가 삭제되었습니다.')
-  }
+  // 검색어를 빈 문자열로 초기화하는 함수 (최초 1회만 생성 후 재사용)
+  const clearSearch = useCallback(() => {
+    setSearch('')
+  }, [])
 
-  // 12. 전체 학생 초기화
-  const clearStudents = () => {
-    setStudents([])
-
-    setMessage('전체 학생 목록을 초기화했습니다.')
-
-    nameInputRef.current.focus()
-  }
-
-  // 13. 출석 학생 수 계산
-  const presentStudents = students.filter((student) =>
-    student.attendance === '출석'
-  )
-
-  // 14. 지각 학생 수 계산
-  const lateStudents = students.filter((student) =>
-    student.attendance === '지각'
-  )
-
-  // 15. 결석 학생 수 계산
-  const absentStudents = students.filter((student) =>
-    student.attendance === '결석'
-  )
-
-  // 16. 화면 출력
   return (
-    <main className="page">
-      {/* 제목 */}
-      <h1>학생 출석·메모 관리</h1>
+    // theme 값('light'/'dark')에 따라 main 요소를 해당 테마 클래스로 동적 변경합니다.
+    <main
+      className={
+        theme === 'light' ? 'page light' : 'page dark'
+      }
+    >
+      <Header>{/* Header 영역 <Header /> 로도 사용 가능*/}</Header>
 
-      {/* 현재 시간 */}
-      <section className="time-box">
-        <span>현재 시간</span>
-        <strong>
-          {currentTime.toLocaleTimeString()}
-        </strong>
-      </section>
-
-      {/* 학생 입력 영역 */}
-      <section className="form-box">
-        <h2>학생 등록</h2>
-
-        {/* 학생 이름 */}
-        <div className="form-group">
-          <label>학생 이름</label>
+      {/* 검색 영역 */}
+      <section className="search-box">
+        <label>학생 이름 검색</label>
+        <div className="search-row">
           <input
-            ref={nameInputRef}
             type="text"
             placeholder="학생 이름 입력"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={search}
+            // 사용자가 입력할 때마다 search 값을 변경
+            onChange={(e) => setSearch(e.target.value)}
           />
+          <button onClick={clearSearch}>검색 초기화</button>
         </div>
 
-        {/* 출석 상태 */}
-        <div className="form-group">
-          <label>출석 상태</label>
-          <select
-            value={attendance}
-            onChange={(e) => setAttendance(e.target.value)}
-          >
-            <option value="출석">출석</option>
-            <option value="지각">지각</option>
-            <option value="결석">결석</option>
-          </select>
-        </div>
-
-        {/* 메모 */}
-        <div className="form-group">
-          <label>메모</label>
-          <textarea
-            placeholder="메모 입력"
-            value={memo}
-            onChange={(e) => setMemo(e.target.value)}
-          ></textarea>
-        </div>
-
-        {/* 학생 추가 버튼 */}
-        <button className="add-button" onClick={addStudent}>
-          학생 추가
-        </button>
-
-        {/* 결과 메시지 */}
-        {message !== '' && (
-          <p className="message">{message}</p>
-        )}
+        <p className="search-result">
+          검색 결과 {filteredStudents.length}명 · 평균 점수 {averageScore}점
+        </p>
       </section>
 
-      {/* 출석 현황 */}
-      <section className="summary-box">
-        <h2>출석 현황</h2>
-
-        <div className="summary-list">
-          <div>
-            <span>전체</span>
-            <strong>{students.length}명</strong>
-          </div>
-
-          <div>
-            <span>출석</span>
-            <strong>{presentStudents.length}명</strong>
-          </div>
-
-          <div>
-            <span>지각</span>
-            <strong>{lateStudents.length}명</strong>
-          </div>
-
-          <div>
-            <span>결석</span>
-            <strong>{absentStudents.length}명</strong>
-          </div>
-        </div>
-      </section>
-
-      {/* 학생 목록 */}
-      <section className="student-box">
-        <div className="student-header">
-          <h2>학생 목록</h2>
-          <button onClick={clearStudents}>
-            전체 초기화
-          </button>
-        </div>
-
-        {/* 학생이 없을 경우 */}
-        {students.length === 0 && (
-          <p className="empty-message">
-            등록된 학생이 없습니다.
-          </p>
-        )}
-
-        {/* 학생 목록 반복 출력 */}
-        {students.map((student) => (
-          <article className="student-card" key={student.id}>
-            <div>
-              <h3>{student.name}</h3>
-
-              <p>
-                출석 상태 : {' '}{student.attendance}
-              </p>
-
-              <p>
-                메모 : {' '}
-                {student.memo === '' ? '없음' : student.memo}
-              </p>
-            </div>
-
-            <button
-              className="delete-button"
-              onClick={() => deleteStudent(student.id)}
-            >
-              삭제
-            </button>
-          </article>
-        ))}
-      </section>
+      {/* 검색된 학생 목록(filteredStudents)을 StudentList 컴포넌트에 props로 전달합니다. */}
+      <StudentList students={filteredStudents} />
     </main>
   )
 }
