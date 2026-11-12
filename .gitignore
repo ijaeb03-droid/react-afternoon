@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# 11차시 API 비밀키 보호
+/ai-study-helper/backend/.env
+/ai-study-helper/backend/.env.*
+/ai-study-helper/backend/node_modules/
