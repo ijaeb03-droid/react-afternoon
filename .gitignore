@@ -23,7 +23,14 @@ dist-ssr
 *.sln
 *.sw?
 
-# 11���� API ���Ű ��ȣ
+# 11���� API ���Ű ��ȣ
 /ai-study-helper/backend/.env
 /ai-study-helper/backend/.env.*
 /ai-study-helper/backend/node_modules/
+
+# 12차시 Gemini API 키 보호
+/ai-shopping-helper/backend/.env
+/ai-shopping-helper/backend/.env.*
+
+# 백엔드 설치 패키지 제외
+/ai-shopping-helper/backend/node_modules/

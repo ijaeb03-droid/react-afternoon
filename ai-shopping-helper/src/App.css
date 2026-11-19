@@ -1,0 +1,95 @@
+
+/* 전체 화면 */
+.page {
+  min-height: 100vh;
+  padding: 40px;
+  box-sizing: border-box;
+  background: #f8fafc;
+  font-family: Arial, sans-serif;
+}
+
+/* 가운데 내용 */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* 제목 영역 */
+.header {
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  margin-bottom: 10px;
+  font-size: 32px;
+  color: #0f172a;
+}
+
+.header p {
+  color: #64748b;
+}
+
+/* 입력 영역 */
+.search-box {
+  padding: 25px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: white;
+}
+
+/* 제목 */
+.search-box h2 {
+  margin-top: 0;
+}
+
+/* label */
+.search-box label {
+  display: block;
+  margin-top: 18px;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+/* input / select / textarea */
+.search-box input,
+.search-box select,
+.search-box textarea {
+  width: 100%;
+  padding: 12px;
+  box-sizing: border-box;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+/* textarea */
+.search-box textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+/* 추천 버튼 */
+.search-box button {
+  margin-top: 20px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* 마우스 올렸을 때 */
+.search-box button:hover {
+  background: #1d4ed8;
+}
+
+/* 결과 영역 */
+.result-box {
+  margin-top: 30px;
+  padding: 25px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: white;
+}
